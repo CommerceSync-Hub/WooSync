@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooSync
  * Description: A plugin to synchronize products from a desktop application to WooCommerce.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Teszáry Péter
  * Text Domain: woosync
  * Domain Path: /languages
@@ -10,28 +10,35 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-// Exit if accessed directly.
-if (!defined('ABSPATH')) {
-    exit;
-}
 
-// Define plugin constants.
-define('WOOSYNC_VERSION', '1.0.0');
-define('WOOSYNC_PATH', plugin_dir_path(__FILE__));
-define('WOOSYNC_URL', plugin_dir_url(__FILE__));
 
-// Include necessary files.
-require_once WOOSYNC_PATH . 'includes/class-sync.php';
-require_once WOOSYNC_PATH . 'includes/class-authentication.php';
+// Kilépés közvetlen hozzáférés esetén.
+if( !defined( 'ABSPATH' ) ) exit;
 
-// Initialize the plugin.
-function woosync_init() {
-    // Initialize sync functionality.
-    $sync = new WooSync_Sync();
-    $sync->init();
+class WooSync 
+{
+  function __construct() {
+    add_action( 'admin_menu', array($this, 'ourMenu') );
+  } 
 
-    // Initialize authentication functionality.
-    $authentication = new WooSync_Authentication();
-    $authentication->init();
-}
-add_action('plugins_loaded', 'woosync_init');
+  function ourMenu()  {
+    add_menu_page('WooSync', 'WooSync', 'manage_options', 'ourwoosyncplugin', array($this, 'woosyncSettingsPage'), 'dashicons-smiley', 111);
+    add_submenu_page( 'ourwoosyncplugin', 'WooSync Authentication', 'Authentication', 'manage_options', 'woosync-authentication', array($this, 'woosyncAuthPage'));
+    add_submenu_page( 'ourwoosyncplugin', 'WooSync Settings', 'Options', 'manage_options', 'woosync-settings', array($this, 'settingsSubPage'));
+  }
+  function woosyncSettingsPage() { ?>
+     Hello World.
+  <?php }
+
+  function settingsSubPage() { ?>
+    This is the Settings Sub Page
+  <?php }
+
+function woosyncAuthPage() { ?>
+    This is the AUTH Sub Page
+  <?php }
+
+  }
+
+
+$WooSync = new WooSync();
