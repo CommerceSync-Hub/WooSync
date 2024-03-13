@@ -10,15 +10,17 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-
-
 // Kilépés közvetlen hozzáférés esetén.
 if( !defined( 'ABSPATH' ) ) exit;
 
-class WooSync 
-{
+class WooSync {
   function __construct() {
     add_action( 'admin_menu', array($this, 'ourMenu') );
+    register_activation_hook( __FILE__, array($this, 'plugin_activation') );
+    add_action( 'admin_init', array($this, 'register_settings') );
+    add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
+    add_action( 'wp_ajax_generate_api_key', array($this, 'generate_api_key_callback') );
+    add_action( 'wp_ajax_reset_api_key', array($this, 'reset_api_key_callback') );
   } 
 
   function ourMenu()  {
@@ -26,19 +28,76 @@ class WooSync
     add_submenu_page( 'ourwoosyncplugin', 'WooSync Authentication', 'Authentication', 'manage_options', 'woosync-authentication', array($this, 'woosyncAuthPage'));
     add_submenu_page( 'ourwoosyncplugin', 'WooSync Settings', 'Options', 'manage_options', 'woosync-settings', array($this, 'settingsSubPage'));
   }
+
+  function plugin_activation() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $table_name = $wpdb->prefix . 'woosync_api_keys';
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+      id mediumint(9) NOT NULL AUTO_INCREMENT,
+      api_key varchar(255) NOT NULL,
+      PRIMARY KEY  (id)
+    ) $charset_collate;";
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+  }
+
+  function register_settings() {
+    register_setting( 'woosync_settings', 'woosync_api_key' );
+    register_setting( 'woosync_settings', 'woosync_sync_interval' );
+  }
+
+  function enqueue_scripts() {
+    wp_enqueue_script( 'woosync-script', plugin_dir_url( __FILE__ ) . 'js/woosync-script.js', array( 'jquery' ), '1.0', true );
+    wp_localize_script( 'woosync-script', 'woosync_ajax_obj', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'security' => wp_create_nonce( 'woosync_ajax_nonce' )
+    ));
+  }
+
   function woosyncSettingsPage() { ?>
-     Hello World.
+      This is the WooSync Page
   <?php }
 
   function settingsSubPage() { ?>
     This is the Settings Sub Page
   <?php }
 
-function woosyncAuthPage() { ?>
-    This is the AUTH Sub Page
-  <?php }
+  function woosyncAuthPage() { 
+    include_once( plugin_dir_path( __FILE__ ) . 'includes/woosync-authentication.php' );
 
   }
 
+  function generate_api_key_callback() {
+    // Generate a random API key
+    $api_key = wp_generate_password( 32, false );
 
-$WooSync = new WooSync();
+    // Save the API key in the database
+    update_option( 'woosync_api_key', $api_key );
+
+    // Return the generated API key
+    echo '<div class="wrap">
+            <p>Your API Key: ' . esc_html( $api_key ) . '</p>
+            <button class="copy-api-key-btn" data-api-key="' . esc_attr( $api_key ) . '">Copy API Key</button>
+            <form method="post" action="">
+              <input type="hidden" name="woosync_reset_key" value="1">
+              <button type="submit" class="reset-api-key-btn">Reset API Key</button>
+            </form>
+          </div>';
+
+    // It's important to exit after echoing the response
+    wp_die();
+  }
+
+  function reset_api_key_callback() {
+    delete_option( 'woosync_api_key' );
+    echo '<div class="wrap">
+            <p>API Key reset successfully.</p>
+            <button id="generate-api-key-btn">Generate API Key</button>
+          </div>';
+    wp_die();
+  }
+}
+
+new WooSync();
+?>
