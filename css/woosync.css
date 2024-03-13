@@ -1,0 +1,13 @@
+.btn--woosync {
+    background-color: aquamarine;
+}
+
+.text--info {
+    font-size: 1em;
+}
+
+.text--info-large {
+    color: grey;
+    font-size: 1.2em;
+    font-weight: 500;
+}
