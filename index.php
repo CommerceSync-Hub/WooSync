@@ -90,15 +90,23 @@ class WooSync {
 
   function generate_api_key_callback()
   {
-    // Generate a random API key
-    $api_key = wp_generate_password(32, false);
+    // Ellenőrizzük, hogy van-e már mentett API kulcs
+    $existing_key = get_option('woosync_api_key');
+    
+    if (!$existing_key) {
+        // Ha nincs tárolt kulcs, akkor generáljunk egy újat
+        $api_key = wp_generate_password(32, false);
 
-    // Save the API key in the database
-    update_option('woosync_api_key', $api_key);
+        // Save the API key in the database
+        update_option('woosync_api_key', $api_key);
+    } else {
+        // Ha már van tárolt kulcs, használjuk azt
+        $api_key = $existing_key;
+    }
 
-    // Return the generated API key
+    // Return the generated API key //itt nem lenne jobb a $existing key?
     echo '<div class="wrap">
-            <p>Your API Key: ' . esc_html($api_key) . '</p>
+            <p>Your API Key: ' . esc_html($api_key) . '</p> 
             <button class="copy-api-key-btn" data-api-key="' . esc_attr($api_key) . '">Copy API Key</button>
             <form method="post" action="">
               <input type="hidden" name="woosync_reset_key" value="1">
