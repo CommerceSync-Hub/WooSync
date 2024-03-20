@@ -7,14 +7,14 @@
   <div class="card">
     <div class="card-body">
       <?php if ( $existing_key ) : ?>
-        <p class="text--info">Your API Key: <?php echo esc_html( $existing_key ); ?></p>
-        <button class="btn btn-success copy-api-key-btn" data-api-key="<?php echo esc_attr( $existing_key ); ?>">Copy API Key</button>
+        <p class="text--info"><strong>Your API Key:</strong><?php echo esc_html( $existing_key ); ?></p>
+        <button class="btn copy-api-key-btn" data-api-key="<?php echo esc_attr( $existing_key ); ?>">Copy API Key</button>
         <form method="post" action="" class="d-inline">
           <input type="hidden" name="woosync_reset_key" value="1">
-          <button type="submit" class="btn btn-danger reset-api-key-btn">Reset API Key</button>
+          <button type="submit" class="btn reset-api-key-btn">Reset API Key</button>
         </form>
       <?php else: ?>
-        <button id="generate-api-key-btn" class="btn btn-success">Generate API Key</button>
+        <button id="generate-api-key-btn" class="btn generate-api-key-btn">Generate API Key</button>
       <?php endif; ?>
     </div>
   </div>

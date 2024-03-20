@@ -11,3 +11,18 @@
     font-size: 1.2em;
     font-weight: 500;
 }
+
+
+.generate-api-key-btn {
+    background-color: aquamarine!important;
+
+}
+
+.reset-api-key-btn {
+    background-color: red!important;
+    border: solid 10px;
+}
+
+.copy-api-key-btn {
+    background-color: green!important;
+}
