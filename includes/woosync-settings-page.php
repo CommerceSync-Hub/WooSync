@@ -5,10 +5,7 @@
     <?php settings_fields('woosync_settings'); ?>
     <table class="table">
       <tbody>
-        <tr>
-          <th scope="row"><label for="woosync_api_key">API Key</label></th>
-          <td><input type="text" name="woosync_api_key" id="woosync_api_key" value="<?php echo esc_attr(get_option('woosync_api_key')); ?>" class="form-control"></td>
-        </tr>
+        <!-- API kulcs rész eltávolítva -->
         <tr>
           <th scope="row"><label for="woosync_sync_interval">Sync Interval</label></th>
           <td>
@@ -29,11 +26,12 @@
         </tr>
       </tbody>
     </table>
+    <!-- "Save Settings" gomb változatlan -->
     <button type="button" class="btn btn-primary mb-3" id="save-settings"><?php submit_button('Save Settings', 'primary', 'submit', false); ?></button>
   </form>
-  <button type="button" class="btn btn-success" id="sync-now">Sync Now</button>
 </div>
 
+<!-- JavaScript kód a Sync Now gomb eltávolításához -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var syncIntervalSelect = document.getElementById('woosync_sync_interval');
@@ -45,14 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       minuteInputRow.style.display = 'none';
     }
-  });
-
-  document.getElementById('sync-now').addEventListener('click', function() {
-    // Végrehajtjuk a szinkronizációt és visszajelzést adunk a felhasználónak
-    alert('Syncing Now...');
-    // Itt kell megvalósítani a szinkronizációt és az eredmény ellenőrzését
-    // Ha változás történt, akkor vissza kell adni a felhasználónak
-    // Ha nincs változás, akkor is vissza kell adni a felhasználónak, hogy nincs változás
   });
 });
 </script>

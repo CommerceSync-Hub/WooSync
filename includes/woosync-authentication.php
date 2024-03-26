@@ -2,7 +2,10 @@
   <h1 class="mb-4">WooSync Authentication</h1>
   <p class="mb-4 text--info-large">You can generate and copy or reset your API key here. It will be stored in the database</p>
   <?php 
-  $existing_key = get_option( 'woosync_api_key' );
+  // Az API kulcs lekérése az adatbázistáblából
+  global $wpdb;
+  $table_name = $wpdb->prefix . 'woosync_api_keys';
+  $existing_key = $wpdb->get_var("SELECT api_key FROM $table_name");
   ?>
   <div class="card">
     <div class="card-body">

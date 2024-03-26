@@ -24,6 +24,8 @@ class WooSync {
 
     // AJAX hívás a szinkronizációhoz és változások ellenőrzéséhez
     add_action('wp_ajax_sync_and_check_changes', array($this, 'sync_and_check_changes_callback'));
+
+    
   }
 
   function ourMenu() {
