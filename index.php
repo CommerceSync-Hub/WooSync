@@ -90,21 +90,29 @@ class WooSync {
 
   function generate_api_key_callback()
   {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'woosync_api_keys';
+
     // Ellenőrizzük, hogy van-e már mentett API kulcs
-    $existing_key = get_option('woosync_api_key');
-    
+    $existing_key = $wpdb->get_var("SELECT api_key FROM $table_name");
+
     if (!$existing_key) {
         // Ha nincs tárolt kulcs, akkor generáljunk egy újat
         $api_key = wp_generate_password(32, false);
 
-        // Save the API key in the database
-        update_option('woosync_api_key', $api_key);
+        // Mentsük el az új API kulcsot az adatbázisba
+        $wpdb->insert(
+            $table_name,
+            array(
+                'api_key' => $api_key
+            )
+        );
     } else {
         // Ha már van tárolt kulcs, használjuk azt
         $api_key = $existing_key;
     }
 
-    // Return the generated API key //itt nem lenne jobb a $existing key?
+    // Return the generated API key
     echo '<div class="wrap">
             <p>Your API Key: ' . esc_html($api_key) . '</p> 
             <button class="copy-api-key-btn" data-api-key="' . esc_attr($api_key) . '">Copy API Key</button>
@@ -119,14 +127,20 @@ class WooSync {
   }
 
   function reset_api_key_callback()
-  {
-    delete_option('woosync_api_key');
+{
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'woosync_api_keys';
+
+    // Töröljük az összes rekordot az adatbázistáblából
+    $wpdb->query("DELETE FROM $table_name");
+
     echo '<div class="wrap">
             <p>API Key reset successfully.</p>
             <button id="generate-api-key-btn">Generate API Key</button>
           </div>';
+
     wp_die();
-  }
+}
 
   // Szinkronizáció és változások ellenőrzése
   function sync_and_check_changes_callback() {
@@ -137,8 +151,6 @@ class WooSync {
 
     // AJAX válasz küldése a kliensnek
     wp_send_json_success($result);
-    
-
   }
 }
 
