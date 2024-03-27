@@ -10,6 +10,7 @@ jQuery(document).ready(function($) {
             success: function(response) {
                 if (response) {
                     $('.wrap').html(response);
+                    location.reload(); // Oldal újratöltése a generálás után
                 }
             }
         });
@@ -36,6 +37,7 @@ jQuery(document).ready(function($) {
                 },
                 success: function(response) {
                     $('.wrap').html(response);
+                    location.reload(); // Oldal újratöltése a reset után
                 }
             });
         }

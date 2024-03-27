@@ -1,5 +1,41 @@
+:root {
+    --primary-color: #7749F8;
+    --primary-color-hover: #5227CC;
+    --secondary-color: #f8f8f8;
+    --dark-color: #353535;
+    --text-color-dark: #a5a5a5;
+    --text-color: rgb(231, 231, 231);
+    --danger-color: rgb(180, 2, 2);
+    --danger-color-hover: rgb(121, 1, 1);
+}
+
+
 .btn--woosync {
-    background-color: aquamarine;
+    /* A gomb általános stílusai */
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn--woosync:hover {
+    /* A gomb hover stílusai */
+    background-color: var(--primary-color-hover);
+}
+
+.btn--woosync-danger {
+    /* A gomb általános stílusai */
+    background-color: var(--danger-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn--woosync-danger:hover {
+    /* A gomb hover stílusai */
+    background-color: var(--danger-color-hover);
 }
 
 .text--info {
@@ -7,7 +43,55 @@
 }
 
 .text--info-large {
-    color: grey;
+    color: var(--text-color-dark);
     font-size: 1.2em;
     font-weight: 500;
+}
+
+.woosync-logo {
+ width: 200px!important;
+}
+
+.woosync-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--secondary-color) /* háttérszín */
+}
+
+.woosync-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.woosync-menu li {
+    margin-right: 20px;
+}
+
+.woosync-logo img {
+    max-width: 100px; /* Max. szélesség a logo számára */
+}
+
+.woosync-menu a {
+    color: gray; /* Alapértelmezett szín */
+    text-decoration: none;
+}
+
+.woosync-menu a:hover {
+    color: black; /* Hover fekete szín */
+}
+
+.github-icon {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+    .woosync-menu {
+        display: none;
+    }
 }

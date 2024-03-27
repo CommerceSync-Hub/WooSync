@@ -29,7 +29,9 @@ class WooSync {
   }
 
   function ourMenu() {
+    
     add_menu_page('WooSync', 'WooSync', 'manage_options', 'ourwoosyncplugin', array($this, 'woosyncSettingsPage'), 'dashicons-smiley', 111);
+    add_submenu_page('ourwoosyncplugin', 'Infon', 'Information', 'manage_options', 'woosync-info', array($this, 'woosyncInfoPage'));
     add_submenu_page('ourwoosyncplugin', 'WooSync Authentication', 'Authentication', 'manage_options', 'woosync-authentication', array($this, 'woosyncAuthPage'));
     add_submenu_page('ourwoosyncplugin', 'WooSync Settings', 'Options', 'manage_options', 'woosync-settings', array($this, 'settingsSubPage'));
   }
@@ -74,11 +76,17 @@ class WooSync {
     ));
   }
 
+
+
   function woosyncSettingsPage()
   {
-  ?>
-    This is the WooSync Page I have to add more text.
-  <?php }
+    include_once(plugin_dir_path(__FILE__) . 'includes/woosync-settings-page.php');
+  }
+
+  function woosyncInfoPage()
+  {
+    include_once(plugin_dir_path(__FILE__) . 'includes/woosync-info-page.php');
+  }
 
   function settingsSubPage()
   {
